@@ -22,7 +22,7 @@ bright_data_api_key = os.getenv("BRIGHT_DATA_API_KEY")
 def load_llm():
 
     llm = LLM(model="gpt-4o", api_key=os.getenv("OPENAI_API_KEY"))
-
+    #ollama
     # llm = LLM(
     #     model="ollama/llama3.2",
     #     base_url="http://localhost:11434"
@@ -85,7 +85,7 @@ st.markdown("""
 
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []  # Chat history
+    st.session_state.messages = []  # Chat history plus session state
 
 if "response" not in st.session_state:
     st.session_state.response = None
@@ -99,7 +99,15 @@ def reset_chat():
 
 def start_analysis():
     # Create a status container
-    
+    while status.info("Extracting videos"):
+        time.sleep(10)
+        status=get_progress(bright_data_api_key):
+
+        if status['status']=='failed':
+            status_container.error(f"Scraping failed: {status}")
+            return
+            
+         
     
     with st.spinner('Scraping videos... This may take a moment.'):
 
